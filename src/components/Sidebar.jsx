@@ -13,13 +13,13 @@ export default function Sidebar({ setLoggedIn }) {
       <div className="flex flex-col gap-16 pt-16">
         <Link
           to={'/'}
-          className=" text-slate-300 hover:scale-150 outline-none focus:scale-125 active:scale-95 transition-all duration-75 flex gap-3"
+          className=" text-slate-300 hover:scale-150 outline-none active:scale-95 transition-all duration-75 flex gap-3"
         >
           <HomeIcon /> Home
         </Link>
         <Link
           to={'/profile'}
-          className=" text-slate-300 hover:scale-150 outline-none focus:scale-125 active:scale-95 transition-all duration-75 flex gap-3"
+          className=" text-slate-300 hover:scale-150 outline-none active:scale-95 transition-all duration-75 flex gap-3"
         >
           <ProfileIcon /> Profile
         </Link>
@@ -28,7 +28,7 @@ export default function Sidebar({ setLoggedIn }) {
         <Link
           to={'/'}
           onClick={HandleLogOut}
-          className="hover:scale-150 outline-none focus:scale-125 hover:text-red-600 active:text-red-700 flex gap-3 active:scale-95 transition-all duration-75 text-red-300"
+          className="hover:scale-150 outline-none hover:text-red-600 active:text-red-700 flex gap-3 active:scale-95 transition-all duration-75 text-red-300"
         >
           <LogoutIcon /> Logout
         </Link>

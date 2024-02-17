@@ -26,7 +26,7 @@ function App() {
       </div>
     </Router>
   ) : (
-    <AuthPage />
+    <AuthPage setLoggedIn={setLoggedIn} />
   );
 }
 

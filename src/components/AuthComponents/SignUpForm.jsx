@@ -31,7 +31,6 @@ export function SignUpForm({ setIsLogIn }) {
     if (response.ok) {
       const data = await response.json();
       if (data.errors) return setErrors(data.errors);
-
       // redirect to login page
       setIsLogIn(true);
     } else {

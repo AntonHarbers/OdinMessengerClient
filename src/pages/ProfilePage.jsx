@@ -1,20 +1,118 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from '../components/Button';
 import InputRow from '../components/ProfilePageComponents/InputRow';
+import AuthErrors from '../components/AuthComponents/AuthErrors';
 
-export default function ProfilePage() {
+// eslint-disable-next-line react/prop-types
+export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
   const [editing, setEditing] = useState(false);
-  const [username, setUsername] = useState('Username');
-  const [email, setEmail] = useState('username@email.com');
-  const [profilePicUrl, setProfilePicUrl] = useState(
-    'https://locahost:3000/3000/1000Abkjsf.sdk'
-  );
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [profilePicUrl, setProfilePicUrl] = useState('');
+  const [errors, setErrors] = useState([]);
+  const loading = useRef(true);
 
-  const HandleEditBtnClick = (e) => {
+  useEffect(() => {
+    if (!loading.current) return;
+    const FetchUserData = async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_PATH}/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              import.meta.env.VITE_JWT
+            )}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setEmail(data.email);
+        setUsername(data.username);
+        setProfilePicUrl(data.profile_pic_url);
+      } else {
+        setErrors(['Something went wrong']);
+      }
+    };
+    FetchUserData();
+    loading.current = false;
+  }, [userId]);
+
+  const HandleEditBtnClick = async (e) => {
     e.preventDefault();
-    setEditing(!editing);
+    setErrors([]);
+    if (username == '') return setErrors(['Username should not be empty']);
+    if (email == '') return setErrors(['Email should not be empty']);
+
+    if (editing) {
+      // send a patch request to update user data
+
+      const body = {
+        username: username,
+        email: email,
+      };
+
+      if (profilePicUrl != '') body.profile_pic_url = profilePicUrl;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_PATH}/users/${userId}`,
+        {
+          method: 'PUT',
+          mode: 'cors',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              import.meta.env.VITE_JWT
+            )}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.errors) {
+          setErrors(data.errors);
+        } else {
+          setEditing(false);
+        }
+      } else {
+        setErrors(['Something went wrong']);
+      }
+    } else {
+      setEditing(true);
+    }
   };
-  return (
+
+  const HandleDeleteProfile = async () => {
+    console.log('deleted');
+    const response = await fetch(
+      `${import.meta.env.VITE_API_PATH}/users/${userId}`,
+      {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(
+            import.meta.env.VITE_JWT
+          )}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      localStorage.setItem(import.meta.env.VITE_JWT, '');
+      setLoggedIn(false);
+      setUserId('');
+    } else {
+      setErrors([
+        'Something went wrong with deleting your account, try again later',
+      ]);
+    }
+  };
+  return !loading.current ? (
     <div className="w-[calc(100%-150px)] flex flex-col justify-start pt-28 items-center">
       <form className="text-slate-100 w-[700px] text-xl flex flex-col gap-2 border-slate-200 border rounded-md p-5">
         <h1 className="text-4xl text-center m-6">User Information</h1>
@@ -45,7 +143,17 @@ export default function ProfilePage() {
               : ' bg-slate-400 hover:bg-slate-500 active:bg-slate-300'
           } transition-all duration-75 `}
         />
+        {errors.map((err) => (
+          <AuthErrors message={err} key={err} />
+        ))}
       </form>
+      <Button
+        customStyles={'bg-red-700 text-white m-5 w-[300px]'}
+        onClickFunction={HandleDeleteProfile}
+        value={'Confirm deletion of your profile'}
+      />
     </div>
+  ) : (
+    <div>Loading...</div>
   );
 }

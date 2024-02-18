@@ -3,13 +3,12 @@ import Button from '../Button';
 import AuthErrors from './AuthErrors';
 
 // eslint-disable-next-line react/prop-types
-export default function LogInForm({ setLoggedIn }) {
+export default function LogInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState([]);
 
   const FetchLogin = async () => {
-    console.log('fetch');
     const response = await fetch(`${import.meta.env.VITE_API_PATH}/log-in`, {
       method: 'POST',
       mode: 'cors',
@@ -27,8 +26,8 @@ export default function LogInForm({ setLoggedIn }) {
       if (data) {
         if (data.errors) return setErrors(data.errors);
 
-        setLoggedIn(true);
         localStorage.setItem(import.meta.env.VITE_JWT, data);
+        window.location.reload();
       } else {
         setErrors(['Something went wrong']);
       }

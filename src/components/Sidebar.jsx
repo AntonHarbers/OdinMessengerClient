@@ -2,10 +2,12 @@ import { HomeIcon, LogoutIcon, ProfileIcon } from '../utils/icons';
 import { Link } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
-export default function Sidebar({ setLoggedIn }) {
+export default function Sidebar({ setLoggedIn, setUserId }) {
   const HandleLogOut = () => {
     // delete the stored jwt from local storage
     setLoggedIn(false);
+    setUserId('');
+
     localStorage.setItem(import.meta.env.VITE_JWT, '');
   };
 

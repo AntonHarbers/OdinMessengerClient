@@ -6,6 +6,7 @@ export default function Sidebar({ setLoggedIn }) {
   const HandleLogOut = () => {
     // delete the stored jwt from local storage
     setLoggedIn(false);
+    localStorage.setItem(import.meta.env.VITE_JWT, '');
   };
 
   return (

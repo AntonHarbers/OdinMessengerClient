@@ -1,24 +1,45 @@
-import { useState } from 'react';
-import Button from '../components/Button';
+import { useEffect, useRef, useState } from 'react';
+import LogInForm from '../components/AuthComponents/LogInForm';
+import { SignUpForm } from '../components/AuthComponents/SignUpForm';
 
 // eslint-disable-next-line react/prop-types
 export default function AuthPage({ setLoggedIn }) {
   const [isLogIn, setIsLogIn] = useState(true);
-  const HandleLogIn = (e) => {
-    e.preventDefault();
-    setLoggedIn(true);
-  };
-  const HandleSignUp = (e) => {
-    e.preventDefault();
-    setLoggedIn(true);
-  };
+  const fetchDone = useRef(false);
+
+  useEffect(() => {
+    const FetchSession = async (JWT) => {
+      const response = await fetch(`${import.meta.env.VITE_API_PATH}/session`, {
+        headers: {
+          Authorization: `Bearer ${JWT}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        data.message == 'You are signed in'
+          ? setLoggedIn(true)
+          : console.log(data.errors[0]);
+      } else {
+        return null;
+      }
+    };
+    if (!fetchDone.current) {
+      const JWT = localStorage.getItem(import.meta.env.VITE_JWT);
+      // check if user has a jwt in local storage
+      if (JWT) {
+        FetchSession(JWT);
+      }
+      fetchDone.current = true;
+    }
+  }, [setLoggedIn]);
 
   return (
     <div className="bg-slate-500 h-[100vh] w-[100vw] flex items-center justify-center flex-col">
       {isLogIn ? (
-        <LogInForm HandleLogIn={HandleLogIn} />
+        <LogInForm setLoggedIn={setLoggedIn} />
       ) : (
-        <SignUpForm HandleSignUp={HandleSignUp} />
+        <SignUpForm setIsLogIn={setIsLogIn} />
       )}
       <button
         onClick={() => setIsLogIn(!isLogIn)}
@@ -29,41 +50,5 @@ export default function AuthPage({ setLoggedIn }) {
           : 'Already have an account? Log-In here'}
       </button>
     </div>
-  );
-}
-
-// eslint-disable-next-line react/prop-types
-export function SignUpForm({ HandleSignUp }) {
-  return (
-    <form className="flex flex-col gap-5 w-[600px]">
-      <h1 className="text-4xl text-center">Sign Up</h1>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">Username</label>
-        <input type="text" className=" rounded-md p-2" />
-      </div>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">Password</label>
-        <input className="rounded-md p-2" type="password" />
-      </div>
-      <Button value={'Log-In'} onClickFunction={HandleSignUp} />
-    </form>
-  );
-}
-
-// eslint-disable-next-line react/prop-types
-export function LogInForm({ HandleLogIn }) {
-  return (
-    <form className="flex flex-col gap-5 w-[600px]">
-      <h1 className="text-4xl text-center">Log-In</h1>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">Username</label>
-        <input type="text" className=" rounded-md p-2" />
-      </div>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">Password</label>
-        <input className="rounded-md p-2" type="password" />
-      </div>
-      <Button value={'Log-In'} onClickFunction={HandleLogIn} />
-    </form>
   );
 }

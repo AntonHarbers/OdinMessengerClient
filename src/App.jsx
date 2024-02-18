@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Homepage';
@@ -6,14 +6,7 @@ import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 
 function App() {
-  const loading = useRef(true);
   const [loggedIn, setLoggedIn] = useState(false);
-
-  useEffect(() => {
-    if (!loading.current) return;
-    loading.current = false;
-    setLoggedIn(true);
-  }, []);
 
   return loggedIn ? (
     <Router>

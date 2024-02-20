@@ -10,12 +10,12 @@
 
 - Chats [20.02]
 
-  - Create new chat
-  - Add other users to chat
+  - Create new chat ✅
+  - Delete chat ✅
   - Remove other users from chat
-  - Change chat admin
-  - Send messages in chat
-  - Delete chats
+    -> Allow admin to click an X next to members names to remove them from the group
+  - Add other users to chat
+    -> Add option to add to group or start new group when searching for users
 
 - Messages [21.02]
 

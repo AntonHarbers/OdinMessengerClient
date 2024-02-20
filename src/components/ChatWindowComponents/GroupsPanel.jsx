@@ -6,12 +6,12 @@ export default function GroupsPanel({ userGroups, setCurrentChat }) {
     <div className="w-[40%] h-full flex-col  flex p-5">
       <div className="h-[10%] text-3xl text-slate-50">Chats</div>
       <div className="h-full">
-        {userGroups.map((item) => (
-          <div key={item._id} onClick={() => setCurrentChat(item)}>
+        {userGroups.map((group) => (
+          <div key={group._id} onClick={() => setCurrentChat(group)}>
             <GroupsPanelItem
-              name={item.name}
-              message={item.lastMessage.text}
-              timestamp={item.lastMessage.time_sent}
+              name={group.name}
+              message={group.message}
+              timestamp={new Date(group.created_at).toDateString()}
             />
           </div>
         ))}

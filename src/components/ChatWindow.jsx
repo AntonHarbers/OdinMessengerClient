@@ -4,7 +4,12 @@ import InputField from './ChatWindowComponents/InputField';
 import { SettingsIcon } from '../utils/icons';
 import { useEffect, useState } from 'react';
 
-export default function ChatWindow({ group, userId, HandleDeleteChat }) {
+export default function ChatWindow({
+  group,
+  setGroup,
+  userId,
+  HandleDeleteChat,
+}) {
   const [showSettings, setShowSettings] = useState(false);
   const [messages, setMessages] = useState([]);
   useEffect(() => {
@@ -23,6 +28,38 @@ export default function ChatWindow({ group, userId, HandleDeleteChat }) {
     };
   }, [group]);
 
+  const RemoveGroupMember = async (memberId) => {
+    console.log(memberId);
+
+    const body = { member: memberId };
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_PATH}/groups/${group._id}/remove`,
+      {
+        method: 'PATCH',
+        mode: 'cors',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(
+            import.meta.env.VITE_JWT
+          )}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      // update the group to remove that member locally
+      console.log(data);
+      data.members = group.members.filter((member) => member._id != memberId);
+      data.admin = { _id: userId };
+      setGroup(data);
+    } else {
+      console.log('Something went horribly wrong');
+    }
+  };
+
   return group ? (
     <div className="h-[100%] w-full p-5">
       <div className="h-[90%] flex justify-center items-center ">
@@ -34,8 +71,29 @@ export default function ChatWindow({ group, userId, HandleDeleteChat }) {
                 <h1>Members:</h1>
                 {group.members.map((member) => (
                   // if you are the admin of this group, then show an x icon next to each name with which you can remove members
-                  <div key={member._id}>
-                    {member._id == userId ? <h1>You</h1> : member.username},
+                  <div
+                    className={`${
+                      member._id == group.admin._id ? 'text-orange-600' : ''
+                    }`}
+                    key={member._id}
+                  >
+                    {member._id == userId ? (
+                      <h1>You</h1>
+                    ) : (
+                      <h1>
+                        {member.username}{' '}
+                        {member._id != group.admin._id &&
+                          userId == group.admin._id && (
+                            <span
+                              className="cursor-pointer"
+                              onClick={() => RemoveGroupMember(member._id)}
+                            >
+                              X
+                            </span>
+                          )}
+                      </h1>
+                    )}
+                    ,
                   </div>
                 ))}
               </div>

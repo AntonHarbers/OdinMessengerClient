@@ -7,7 +7,12 @@ export default function GroupsPanel({ userGroups, setCurrentChat }) {
       <div className="h-[10%] text-3xl text-slate-50">Chats</div>
       <div className="h-full">
         {userGroups.map((group) => (
-          <div key={group._id} onClick={() => setCurrentChat(group)}>
+          <div
+            key={group._id}
+            onClick={() => {
+              setCurrentChat((oldChat) => (oldChat == group ? null : group));
+            }}
+          >
             <GroupsPanelItem
               name={group.name}
               message={group.message}

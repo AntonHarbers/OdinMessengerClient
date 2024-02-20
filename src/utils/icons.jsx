@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 export function HomeIcon() {
   return (
     <div className="">
@@ -61,7 +62,6 @@ export function LogoutIcon() {
   );
 }
 
-// eslint-disable-next-line react/prop-types
 export function GroupIcon({ classProps }) {
   return (
     <div>
@@ -83,7 +83,6 @@ export function GroupIcon({ classProps }) {
   );
 }
 
-// eslint-disable-next-line react/prop-types
 export function SettingsIcon({ classProps }) {
   return (
     <div>
@@ -104,6 +103,65 @@ export function SettingsIcon({ classProps }) {
           strokeLinecap="round"
           strokeLinejoin="round"
           d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+        />
+      </svg>
+    </div>
+  );
+}
+
+export function AddIcon({ classProps }) {
+  return (
+    <div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className={classProps}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 4.5v15m7.5-7.5h-15"
+        />
+      </svg>
+    </div>
+  );
+}
+
+export function RemoveIcon({ classProps }) {
+  return (
+    <div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className={classProps}
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+      </svg>
+    </div>
+  );
+}
+
+export function SearchIcon({ classProps }) {
+  return (
+    <div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className={classProps}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
         />
       </svg>
     </div>

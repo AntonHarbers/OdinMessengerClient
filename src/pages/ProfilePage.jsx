@@ -115,7 +115,16 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
   return !loading.current ? (
     <div className="w-[calc(100%-150px)] flex flex-col justify-start pt-28 items-center">
       <form className="text-slate-100 w-[700px] text-xl flex flex-col gap-2 border-slate-200 border rounded-md p-5">
-        <h1 className="text-4xl text-center m-6">User Information</h1>
+        <h1 className="text-4xl text-center m-6 flex items-center justify-between gap-10">
+          User Information
+          {profilePicUrl != '' && (
+            <div className="h-20 w-20 overflow-hidden flex items-center justify-center rounded-full">
+              {' '}
+              <img src={profilePicUrl} />
+            </div>
+          )}
+        </h1>
+
         <InputRow
           editing={editing}
           infoValue={username}

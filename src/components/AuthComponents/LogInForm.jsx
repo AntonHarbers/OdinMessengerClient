@@ -8,7 +8,7 @@ export default function LogInForm() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState([]);
 
-  const FetchLogin = async () => {
+  const FetchLogin = async (emailValue, passwordValue) => {
     const response = await fetch(`${import.meta.env.VITE_API_PATH}/log-in`, {
       method: 'POST',
       mode: 'cors',
@@ -16,8 +16,8 @@ export default function LogInForm() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: email,
-        password: password,
+        email: emailValue,
+        password: passwordValue,
       }),
     });
 
@@ -45,7 +45,12 @@ export default function LogInForm() {
     if (password.length < 6)
       return setErrors(['Password needs to be at least 6 characters long']);
     // send api request to log in route and see if response is a jwt
-    FetchLogin();
+    FetchLogin(email, password);
+  };
+
+  const HandleGuestLogin = (e) => {
+    e.preventDefault();
+    FetchLogin('guest@test.com', 'default1234');
   };
 
   return (
@@ -73,6 +78,10 @@ export default function LogInForm() {
       {errors.map((err, index) => (
         <AuthErrors key={index} message={err} />
       ))}
+      <Button
+        value={'Try with guest profile'}
+        onClickFunction={HandleGuestLogin}
+      />
     </form>
   );
 }

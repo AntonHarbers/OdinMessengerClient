@@ -42,19 +42,25 @@ function App() {
   return loggedIn ? (
     <Router>
       <div className="select-none flex bg-slate-600">
-        <Sidebar setLoggedIn={setLoggedIn} setUserId={setUserId} />
+        <Sidebar
+          setLoggedIn={setLoggedIn}
+          setUserId={setUserId}
+          userId={userId}
+        />
         <Routes>
           <Route path="/" element={<HomePage userId={userId} />} />
-          <Route
-            path="/profile"
-            element={
-              <ProfilePage
-                userId={userId}
-                setLoggedIn={setLoggedIn}
-                setUserId={setUserId}
-              />
-            }
-          />
+          {userId != import.meta.env.VITE_GUEST_ID && (
+            <Route
+              path="/profile"
+              element={
+                <ProfilePage
+                  userId={userId}
+                  setLoggedIn={setLoggedIn}
+                  setUserId={setUserId}
+                />
+              }
+            />
+          )}
         </Routes>
       </div>
     </Router>

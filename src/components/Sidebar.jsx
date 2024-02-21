@@ -2,7 +2,7 @@ import { HomeIcon, LogoutIcon, ProfileIcon } from '../utils/icons';
 import { Link } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
-export default function Sidebar({ setLoggedIn, setUserId }) {
+export default function Sidebar({ setLoggedIn, setUserId, userId }) {
   const HandleLogOut = () => {
     // delete the stored jwt from local storage
     setLoggedIn(false);
@@ -20,12 +20,14 @@ export default function Sidebar({ setLoggedIn, setUserId }) {
         >
           <HomeIcon /> Home
         </Link>
-        <Link
-          to={'/profile'}
-          className=" text-slate-300 hover:scale-150 outline-none active:scale-95 transition-all duration-75 flex gap-3"
-        >
-          <ProfileIcon /> Profile
-        </Link>
+        {userId != import.meta.env.VITE_GUEST_ID && (
+          <Link
+            to={'/profile'}
+            className=" text-slate-300 hover:scale-150 outline-none active:scale-95 transition-all duration-75 flex gap-3"
+          >
+            <ProfileIcon /> Profile
+          </Link>
+        )}
       </div>
       <div className="flex pb-16">
         <Link

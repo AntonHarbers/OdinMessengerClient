@@ -55,7 +55,7 @@ export default function Homepage({ userId }) {
 
   const HandleStartNewChat = async (otherUser) => {
     const JWT = localStorage.getItem(import.meta.env.VITE_JWT);
-
+    console.log(otherUser);
     const body = {
       name: 'New Chat',
       admin: userId,
@@ -90,6 +90,7 @@ export default function Homepage({ userId }) {
   };
 
   const HandleAddUserToChat = async (otherUser) => {
+    console.log(otherUser);
     const body = { member: otherUser._id };
 
     console.log('members:');
@@ -173,6 +174,7 @@ export default function Homepage({ userId }) {
           setGroup={setCurrentChat}
           userId={userId}
           HandleDeleteChat={HandleDeleteChat}
+          setUserGroups={setUserGroups}
         />
 
         {showGroups && (

@@ -99,7 +99,7 @@ export function SignUpForm({ setIsLogIn }) {
           type="text"
         />
       </div>
-      <Button value={'Log-In'} onClickFunction={HandleSignUp} />
+      <Button value={'Sign-Up'} onClickFunction={HandleSignUp} />
       {errors.map((err) => (
         <AuthErrors key={err} message={err} />
       ))}

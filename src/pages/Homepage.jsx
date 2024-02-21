@@ -3,12 +3,20 @@ import { useEffect, useState } from 'react';
 import ChatWindow from '../components/ChatWindow';
 import { GroupIcon, SearchIcon } from '../utils/icons';
 import GroupsPanel from '../components/ChatWindowComponents/GroupsPanel';
+import Button from '../components/Button';
 
 export default function Homepage({ userId }) {
   const [showGroups, setShowGroups] = useState(true);
   const [users, setUsers] = useState([]);
   const [userGroups, setUserGroups] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
+  const [isDeletingChat, setIsDeletingChat] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
+  useEffect(() => {
+    setShowSettings(false);
+    setIsDeletingChat(false);
+  }, [currentChat]);
 
   useEffect(() => {
     const JWT = localStorage.getItem(import.meta.env.VITE_JWT);
@@ -23,7 +31,11 @@ export default function Homepage({ userId }) {
 
       if (response.ok) {
         const data = await response.json();
-        setUsers(data.filter((user) => user.username != 'Deleted User'));
+        setUsers(
+          data
+            .filter((user) => user.username != 'Deleted User')
+            .filter((user) => user._id != userId)
+        );
       } else {
         console.log('something went wrong');
       }
@@ -51,7 +63,7 @@ export default function Homepage({ userId }) {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [userId]);
 
   const HandleStartNewChat = async (otherUser) => {
     const JWT = localStorage.getItem(import.meta.env.VITE_JWT);
@@ -75,13 +87,6 @@ export default function Homepage({ userId }) {
 
     if (response.ok) {
       const data = await response.json();
-      const members = [
-        { username: 'You', _id: userId },
-        { username: otherUser.username, _id: otherUser._id },
-      ];
-      const admin = { _id: userId };
-      data.members = members;
-      data.admin = admin;
       setUserGroups((currentGroups) => [...currentGroups, data]);
       setCurrentChat(data);
     } else {
@@ -90,11 +95,7 @@ export default function Homepage({ userId }) {
   };
 
   const HandleAddUserToChat = async (otherUser) => {
-    console.log(otherUser);
     const body = { member: otherUser._id };
-
-    console.log('members:');
-    console.log(currentChat.members);
     const response = await fetch(
       `${import.meta.env.VITE_API_PATH}/groups/${currentChat._id}/add`,
       {
@@ -111,15 +112,7 @@ export default function Homepage({ userId }) {
     );
 
     if (response.ok) {
-      // add the otheruser to the members array of that active group and of the group in
       const data = await response.json();
-      const updatedGroup = currentChat;
-      updatedGroup.members.push({
-        _id: otherUser._id,
-        username: otherUser.username,
-      });
-      data.members = updatedGroup.members;
-      data.admin = { _id: userId };
       setCurrentChat(data);
     } else {
       console.log('Something went horribly wrong');
@@ -143,8 +136,8 @@ export default function Homepage({ userId }) {
     if (response.ok) {
       setCurrentChat(null);
       setUserGroups(userGroups.filter((group) => group._id != chatId));
-      const data = await response.json();
-      console.log(data);
+      setIsDeletingChat(false);
+      setShowSettings(false);
     } else {
       console.log('something went wrong');
     }
@@ -175,6 +168,10 @@ export default function Homepage({ userId }) {
           userId={userId}
           HandleDeleteChat={HandleDeleteChat}
           setUserGroups={setUserGroups}
+          isDeletingChat={isDeletingChat}
+          setIsDeletingChat={setIsDeletingChat}
+          showSettings={showSettings}
+          setShowSettings={setShowSettings}
         />
 
         {showGroups && (
@@ -227,22 +224,34 @@ function SearchBar({
               setSearchVal('');
             }, 150)
           }
-          className=" w-52 outline-none cursor-pointer"
+          className=" w-full outline-none cursor-pointer"
         />
       </div>
       <div className="absolute w-full top-8">
         {searchedUsers.map((user) => (
           <div
-            onClick={() =>
-              currentChat == null
-                ? HandleStartNewChat(user)
-                : HandleAddUserToChat(user)
-            }
             key={user._id}
-            className={`flex bg-white w-full p-2 border-t-2 items-center rounded-md border-black gap-5 cursor-pointer hover:bg-blue-100`}
+            className={`flex bg-white w-full justify-between p-2 border-t-2 items-center rounded-md border-black gap-5`}
           >
-            <div className="w-5 h-5 rounded-full bg-slate-300 text-center"></div>
-            <div className=" text-blue-600">@{user.username}</div>
+            <div className=" text-blue-600 text-4xl">@{user.username}</div>
+            <div>
+              <Button
+                onClickFunction={() => HandleStartNewChat(user)}
+                customStyles={'bg-green-400 hover:bg-green-300'}
+                value={'New Chat'}
+              />
+              {/* Show add to current chat button if current chat is not null */}
+              {currentChat != null &&
+                !currentChat.members.some(
+                  (member) => member._id === user._id
+                ) && (
+                  <Button
+                    onClickFunction={() => HandleAddUserToChat(user)}
+                    customStyles={'bg-yellow-400 hover:bg-yellow-300'}
+                    value={'Add to Chat'}
+                  />
+                )}
+            </div>
           </div>
         ))}
       </div>

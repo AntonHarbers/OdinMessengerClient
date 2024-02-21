@@ -3,6 +3,7 @@ import Message from './ChatWindowComponents/Message';
 import InputField from './ChatWindowComponents/InputField';
 import { SettingsIcon } from '../utils/icons';
 import { useEffect, useState } from 'react';
+import Button from './Button';
 
 export default function ChatWindow({
   group,
@@ -10,8 +11,11 @@ export default function ChatWindow({
   userId,
   HandleDeleteChat,
   setUserGroups,
+  isDeletingChat,
+  setIsDeletingChat,
+  showSettings,
+  setShowSettings,
 }) {
-  const [showSettings, setShowSettings] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isUpdatingGroupName, setIsUpadtingGroupName] = useState(false);
   const [isUpdatingGroupMessage, setIsUpdatingGroupMessage] = useState(false);
@@ -67,10 +71,6 @@ export default function ChatWindow({
 
     if (response.ok) {
       const data = await response.json();
-      // update the group to remove that member locally
-      console.log(data);
-      data.members = group.members.filter((member) => member._id != memberId);
-      data.admin = { _id: userId };
       setGroup(data);
     } else {
       console.log('Something went horribly wrong');
@@ -184,26 +184,26 @@ export default function ChatWindow({
                   <div
                     className={`${
                       member._id == group.admin._id ? 'text-orange-600' : ''
-                    }`}
+                    } flex`}
                     key={member._id}
                   >
                     {member._id == userId ? (
-                      <h1>You</h1>
+                      <h1>You, </h1>
                     ) : (
-                      <h1>
-                        {member.username}{' '}
+                      <h1 className="">
+                        {member.username}
                         {member._id != group.admin._id &&
                           userId == group.admin._id && (
                             <span
-                              className="cursor-pointer"
+                              className="cursor-pointer hover:text-red-600 text-[10px]"
                               onClick={() => RemoveGroupMember(member._id)}
                             >
-                              X
+                              -Kick
                             </span>
                           )}
+                        ,
                       </h1>
                     )}
-                    ,
                   </div>
                 ))}
               </div>
@@ -267,9 +267,18 @@ export default function ChatWindow({
                           {isUpdatingGroupMessage ? 'Save' : 'Edit'}
                         </button>
                       </div>
-                      <button onClick={() => HandleDeleteChat(group._id)}>
-                        Delete This Chat
-                      </button>
+                      <Button
+                        onClickFunction={() =>
+                          setIsDeletingChat(!isDeletingChat)
+                        }
+                        value={isDeletingChat ? 'Undo' : 'Delete Chat'}
+                      />
+                      {isDeletingChat && (
+                        <Button
+                          onClickFunction={() => HandleDeleteChat(group._id)}
+                          value={'Confirm Chat Deletion'}
+                        />
+                      )}
                     </div>
                   )}
                 </div>

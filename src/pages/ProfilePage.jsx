@@ -12,6 +12,8 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
   const [errors, setErrors] = useState([]);
   const loading = useRef(true);
 
+  const [isDeletingProfile, setIsDeletingProfile] = useState(false);
+
   useEffect(() => {
     if (!loading.current) return;
     const FetchUserData = async () => {
@@ -85,8 +87,12 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
     }
   };
 
-  const HandleDeleteProfile = async () => {
-    console.log('deleted');
+  const HandleDeleteProfileBtnClick = () => {
+    setIsDeletingProfile(!isDeletingProfile);
+  };
+
+  const HandleConfirmDeleteProfile = async () => {
+    setIsDeletingProfile(false);
     const response = await fetch(
       `${import.meta.env.VITE_API_PATH}/users/${userId}`,
       {
@@ -157,10 +163,21 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
         ))}
       </form>
       <Button
-        customStyles={'bg-red-700 text-white m-5 w-[300px]'}
-        onClickFunction={HandleDeleteProfile}
-        value={'Confirm deletion of your profile'}
+        customStyles={`${
+          isDeletingProfile ? 'bg-green-400' : 'bg-red-500'
+        } text-white m-5 w-[300px]`}
+        value={isDeletingProfile ? 'Undo' : 'Delete Profile'}
+        onClickFunction={HandleDeleteProfileBtnClick}
       />
+      {isDeletingProfile && (
+        <Button
+          customStyles={'bg-red-700 text-white m-5 w-[300px]'}
+          onClickFunction={HandleConfirmDeleteProfile}
+          value={
+            'Click here to confirm profile deletion. This action cannot be undone.'
+          }
+        />
+      )}
     </div>
   ) : (
     <div>Loading...</div>

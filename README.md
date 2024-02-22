@@ -6,16 +6,17 @@
 
 [API Endpoint]()
 
-- send images [22.02]
-- Deal with profile pictures [22.02]
-- Add a confirm option to removing a member from a group by clicking their name [21.02]
-- Update styles [22.02]
+- Add socketIO integration [22.02]
+- Online Status [22.02]
 
-- Handle Unauthorized Requests with logout call [23.02]
-- Make sure user cant find themselves in the chat search [23.02]
-- Add socketIO integration [23.02]
-- Online Status [23.02]
+- Refactor [23.02]
+- Update styles [23.02]
+- Deal with loading states [23.02]
+- Documentation, Publish [23.02]
 
-- Refactor, Documentation, Publish [24/25.02]
+Future Features/Issues to add to github:
 
-Deleting messages shouldnt be a thing, as it can serve to falsify a record of some sort and it forces you to be intentional about your messages which reduces serves load/ same deal with editing
+Send Images
+Reply to specific message like in whatapp
+React to messages with emojis
+Handle Unauthorized Requests with a logout call

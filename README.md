@@ -8,7 +8,6 @@
 
 - Add socketIO integration [22.02]
 - Online Status [22.02]
-
 - Refactor [23.02]
 - Update styles [23.02]
 - Deal with loading states [23.02]

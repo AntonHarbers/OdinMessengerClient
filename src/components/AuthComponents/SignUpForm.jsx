@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Button from '../Button';
 import AuthErrors from './AuthErrors';
 
 // eslint-disable-next-line react/prop-types
@@ -52,57 +51,149 @@ export function SignUpForm({ setIsLogIn }) {
     FetchSignup();
   };
   return (
-    <form className="flex flex-col gap-5 w-[600px]">
-      <h1 className="text-4xl text-center">Sign Up</h1>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">Username</label>
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          type="text"
-          className=" rounded-md p-2"
-        />
+    <div className="flex min-h-full w-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Sign up for a new Account
+        </h2>
       </div>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">E-mail</label>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="rounded-md p-2"
-          type="text"
-        />
+
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6" action="#" method="POST">
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium leading-6 text-white"
+            >
+              Username
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium leading-6 text-white"
+            >
+              Email address
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-white"
+              >
+                Password
+              </label>
+            </div>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium leading-6 text-white"
+              >
+                Confirm Password
+              </label>
+            </div>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="profilePicUrl"
+              className="block text-sm font-medium leading-6 text-white"
+            >
+              Profile Picture URL
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={profilePicUrl}
+                onChange={(e) => setProfilePicUrl(e.target.value)}
+                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              onClick={HandleSignUp}
+              className="flex w-full justify-center rounded-md bg-orange-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:text-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Sign Up
+            </button>
+          </div>
+
+          {errors.map((err, index) => (
+            <AuthErrors key={index} message={err} />
+          ))}
+        </form>
+
+        <p className="mt-10 text-center text-sm text-white">
+          Already have an account?
+          <button
+            onClick={() => setIsLogIn(true)}
+            className="flex w-full justify-center rounded-md bg-orange-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:text-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Log in Here
+          </button>{' '}
+        </p>
       </div>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">Password</label>
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="rounded-md p-2"
-          type="password"
-        />
-      </div>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">Confirm Password</label>
-        <input
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="rounded-md p-2"
-          type="password"
-        />
-      </div>
-      <div className="flex w-full text-3xl justify-between gap-2">
-        <label className="p-2">Profile Picture Url (optional)</label>
-        <input
-          value={profilePicUrl}
-          onChange={(e) => setProfilePicUrl(e.target.value)}
-          className="rounded-md p-2"
-          type="text"
-        />
-      </div>
-      <Button value={'Sign-Up'} onClickFunction={HandleSignUp} />
-      {errors.map((err) => (
-        <AuthErrors key={err} message={err} />
-      ))}
-    </form>
+    </div>
   );
 }

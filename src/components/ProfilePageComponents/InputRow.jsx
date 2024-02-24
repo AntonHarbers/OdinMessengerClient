@@ -8,13 +8,14 @@ export default function InputRow({
 }) {
   return (
     <div className="flex gap-2 w-full justify-between">
-      <label htmlFor="username" className="p-2">
+      <label htmlFor={labelValue} className="p-2">
         {labelValue}
       </label>
       {editing ? (
         <input
           type="text"
-          name="username"
+          name={labelValue}
+          id={labelValue}
           className="rounded-md p-3 text-center w-[60%] bg-slate-700 text-slate-50 overflow-hidden"
           value={infoValue}
           onChange={(e) => setValueFunction(e.target.value)}

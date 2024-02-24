@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '../components/Button';
 import InputRow from '../components/ProfilePageComponents/InputRow';
 import AuthErrors from '../components/AuthComponents/AuthErrors';
+import Loading from '../components/Loading';
 
 // eslint-disable-next-line react/prop-types
 export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
@@ -87,10 +88,6 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
     }
   };
 
-  const HandleDeleteProfileBtnClick = () => {
-    setIsDeletingProfile(!isDeletingProfile);
-  };
-
   const HandleConfirmDeleteProfile = async () => {
     setIsDeletingProfile(false);
     const response = await fetch(
@@ -118,6 +115,7 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
       ]);
     }
   };
+
   return !loading.current ? (
     <div className="w-[calc(100%-150px)] flex flex-col justify-start pt-28 items-center">
       <form className="text-slate-100 w-[700px] text-xl flex flex-col gap-2 border-slate-200 border rounded-md p-5">
@@ -125,7 +123,6 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
           User Information
           {profilePicUrl != '' && (
             <div className="h-20 w-20 overflow-hidden flex items-center justify-center rounded-full">
-              {' '}
               <img src={profilePicUrl} />
             </div>
           )}
@@ -167,7 +164,7 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
           isDeletingProfile ? 'bg-green-400' : 'bg-red-500'
         } text-white m-5 w-[300px]`}
         value={isDeletingProfile ? 'Undo' : 'Delete Profile'}
-        onClickFunction={HandleDeleteProfileBtnClick}
+        onClickFunction={() => setIsDeletingProfile(!isDeletingProfile)}
       />
       {isDeletingProfile && (
         <Button
@@ -180,6 +177,6 @@ export default function ProfilePage({ userId, setLoggedIn, setUserId }) {
       )}
     </div>
   ) : (
-    <div>Loading...</div>
+    <Loading />
   );
 }

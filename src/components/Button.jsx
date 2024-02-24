@@ -2,7 +2,7 @@
 export default function Button({ value, onClickFunction, customStyles }) {
   return (
     <button
-      className={`p-4 border rounded-md text-xl ${customStyles}`}
+      className={`rounded px-2 py-1 text-xl font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ${customStyles}`}
       onClick={(e) => onClickFunction(e)}
     >
       {value}

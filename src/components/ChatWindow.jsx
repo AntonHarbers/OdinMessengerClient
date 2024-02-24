@@ -24,8 +24,6 @@ export default function ChatWindow({
   const [updatedProfilePicText, setUpdatedProfilePicText] = useState('');
 
   useEffect(() => {
-    console.log('Loading');
-    // get messages of this chat from server whenever chatwindow rerenders
     const FetchUserGroupMessages = async () => {
       const response = await fetch(
         `${import.meta.env.VITE_API_PATH}/messages/${group._id}`,
@@ -54,8 +52,6 @@ export default function ChatWindow({
   }, [group]);
 
   const RemoveGroupMember = async (memberId) => {
-    console.log(memberId);
-
     const body = { member: memberId };
 
     const response = await fetch(

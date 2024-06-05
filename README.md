@@ -1,10 +1,10 @@
 # Odin Messanger Client - The Odin project
 
-[Live Link]()
+[Live Link](https://odinmessagesclient.netlify.app/)
 
-[API Repo]()
+[API Repo](https://github.com/AntonHarbers/Odin-Messanger-API)
 
-[API Endpoint]()
+[API Endpoint](https://cut-easy-overcoat.glitch.me/)
 
 - Refactor [23.02]
 - Update styles [23.02]
